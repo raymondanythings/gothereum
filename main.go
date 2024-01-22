@@ -9,8 +9,17 @@ import (
 
 const port string = ":4000"
 
+type URL string 
+
+func (u URL) MarshalText()([]byte, error){
+	url := fmt.Sprintf("http://localhost%s%s",port , u)
+	return []byte(url),nil
+}
+
+
+
 type URLDescription struct {
-	URL         string `json:"url"`
+	URL         URL `json:"url"`
 	Method      string `json:"method"`
 	Description string `json:"description"`
 	Payload     string `json:"payload,omitempty"`
@@ -19,12 +28,12 @@ type URLDescription struct {
 func documentation(rw http.ResponseWriter, r *http.Request) {
 	data := []URLDescription{
 		{
-			URL:         "/",
+			URL:         URL("/"),
 			Method:      "GET",
 			Description: "See Documentation",
 		},
 		{
-			URL:         "/block",
+			URL:         URL("/block"),
 			Method:      "POST",
 			Description: "Add a Block",
 			Payload:     "data:string",
@@ -36,6 +45,7 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
 	http.HandleFunc("/", documentation)
 	fmt.Printf("Listening on http://localhost%s\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
