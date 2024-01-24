@@ -1,7 +1,7 @@
 package main
 
-import "github.com/raymondanythings/gothereum/cli"
+import "github.com/raymondanythings/gothereum/blockchain"
 
 func main() {
-	cli.Start()
+	blockchain.Blockchain()
 }
